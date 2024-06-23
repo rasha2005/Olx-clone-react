@@ -1,7 +1,28 @@
-import React from "react";
+import React, { useContext } from "react";
 import  { LOGO_URL } from "../assets/logo"
+import { AuthContext } from "../store/userAuthContext";
+import { Link, useNavigate } from "react-router-dom";
+import { logout } from "../firebase/config";
 
 const Header = () => {
+  const navigate = useNavigate();
+
+  const {user ,setUser} = useContext(AuthContext)
+  if(user != null) {
+    console.log("congrats it working",user)
+
+  }else {
+    console.log('im soryy :(')
+  }
+
+  const handleLogout = () => {
+        
+    setUser(null);
+    logout();
+    navigate("/login")
+   
+};
+ 
     return (
         <div className="grid grid-cols-12 bg-gray-100">
       <div className="col-span-2 flex">
@@ -38,7 +59,19 @@ const Header = () => {
             ENGLISH
           </div>
 
-          <div className="nav-text underline hover:cursor-pointer font-bold"> Login</div>
+          {user ? (
+                    <div
+                        onClick={handleLogout}
+                        className="nav-text underline hover:cursor-pointer font-bold"
+                    >
+                        Logout
+                    </div>
+                ) : (
+                    <Link
+                     to="/login" className="nav-text underline hover:cursor-pointer font-bold">
+                        Login
+                    </Link>
+                )}
           
               <button className="nav-text px-6 py-1 bg-white rounded-3xl sell-button flex items-center">
                 SELL

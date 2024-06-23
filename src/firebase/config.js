@@ -1,5 +1,5 @@
 import { initializeApp } from "firebase/app";
-import { getAuth } from "firebase/auth";
+import { getAuth ,setPersistence ,browserLocalPersistence, signOut } from "firebase/auth";
 import { getFirestore } from "firebase/firestore";
 const firebaseConfig = {
   apiKey: "AIzaSyD8Zwt_cRrkgznziEv68djTyL7EFlUUFKg",
@@ -15,7 +15,18 @@ const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const db = getFirestore(app);
 
+setPersistence(auth, browserLocalPersistence)
+  .catch((error) => {
+    console.error('Error setting persistence:', error);
+  });
+
+  const logout = () => {
+    console.log("Logged out from firebase file")
+    signOut(auth);
+}
+
 export  {
     db,
-    auth
+    auth,
+    logout
 }
