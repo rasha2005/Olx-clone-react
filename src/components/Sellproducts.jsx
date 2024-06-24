@@ -5,6 +5,9 @@ import { collection, addDoc } from "firebase/firestore";
 import { db } from "../firebase/config";
 import { useNavigate } from "react-router-dom";
 import pica from "pica";
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css'
+import { createValidation } from "../utilities/createValidation";
 
 const Sellprodudct = () => {
 
@@ -12,6 +15,7 @@ const Sellprodudct = () => {
     const [category , setCategory] = useState('');
     const [price , setPrice] = useState('')
     const [place , setPlace] = useState('');
+    const [desc , setDesc] =useState('');
     const [image , setImage] = useState(null);
     const {user} = useContext(AuthContext);
     const navigate = useNavigate();
@@ -36,6 +40,14 @@ const Sellprodudct = () => {
       };
 
     const handleSubmit = async () => {
+
+        const message = createValidation(name, category, price, place , desc)
+
+        if (message) {
+            toast.error(message);
+            return;
+          }
+
         const resizedImage = await resizeImage(image, 300, 300);
         const storage = getStorage();
         const storageRef = ref(storage, 'images/' + image.name);
@@ -48,6 +60,7 @@ const Sellprodudct = () => {
           category,
           price,
           place,
+          description: desc,
           url,
           userId: user.uid,
           createdAt: date.toDateString(),
@@ -59,50 +72,55 @@ const Sellprodudct = () => {
 
     return (
         <div className="flex justify-center items-center min-h-screen bg-gray-100 overflow-hidden">
-        <div className="bg-white p-8 rounded-lg w-full max-w-md">
-            <h2 className="text-2xl font-bold mb-6 text-center">Upload Form</h2>
-            <input
-                type="text"
-                placeholder="Name"
-                value={name}
-                onChange={(e) => setName(e.target.value)}
-                className="w-full p-2 mb-4 border border-gray-300 rounded"
-            />
-            <input
-                type="text"
-                placeholder="Category"
-                value={category}
-                onChange={(e) => setCategory(e.target.value)}
-                className="w-full p-2 mb-4 border border-gray-300 rounded"
-            />
-            <input
-                type="text"
-                placeholder="Price"
-                value={price}
-                onChange={(e) => setPrice(e.target.value)}
-                className="w-full p-2 mb-4 border border-gray-300 rounded"
-            />
-             <input
-                type="text"
-                placeholder="Place"
-                value={place}
-                onChange={(e) => setPlace(e.target.value)}
-                className="w-full p-2 mb-4 border border-gray-300 rounded"
-            />
-            <img className="h-40 w-40" src={image ? URL.createObjectURL(image) : ''} alt="Posts" />
-            <br />
-            <input
-                type="file"
-                onChange={(e) => {
-                    setImage(e.target.files[0]);
-                }}
-                className="w-full p-2 mb-4 border border-gray-300 rounded"
-            />
-            <button onClick={handleSubmit} className="w-full p-2 bg-blue-500 text-white rounded hover:bg-blue-600">
-                Upload and Submit
-            </button>
+        <div className="bg-white p-6 rounded-lg w-full max-w-md">
+          <h2 className="text-2xl font-bold mb-4 text-center">Upload Form</h2>
+          <input
+            type="text"
+            placeholder="Name"
+            value={name}
+            onChange={(e) => setName(e.target.value)}
+            className="w-full p-2 mb-3 border border-gray-300 rounded"
+          />
+          <input
+            type="text"
+            placeholder="Category"
+            value={category}
+            onChange={(e) => setCategory(e.target.value)}
+            className="w-full p-2 mb-3 border border-gray-300 rounded"
+          />
+          <input
+            type="text"
+            placeholder="Price"
+            value={price}
+            onChange={(e) => setPrice(e.target.value)}
+            className="w-full p-2 mb-3 border border-gray-300 rounded"
+          />
+          <input
+            type="text"
+            placeholder="Place"
+            value={place}
+            onChange={(e) => setPlace(e.target.value)}
+            className="w-full p-2 mb-3 border border-gray-300 rounded"
+          />
+          <textarea
+            placeholder="Description"
+            value={desc}
+            onChange={(e) => setDesc(e.target.value)}
+            className="w-full p-2 mb-3 border border-gray-300 rounded h-32"
+          />
+          <img className="mb-3 max-h-40 max-w-40" src={image ? URL.createObjectURL(image) : ''} alt="Posts" />
+          <input
+            type="file"
+            onChange={(e) => {
+              setImage(e.target.files[0]);
+            }}
+            className="w-full p-2 mb-3 border border-gray-300 rounded"
+          />
+          <button onClick={handleSubmit} className="w-full p-2 bg-blue-500 text-white rounded hover:bg-blue-600">
+            Upload and Submit
+          </button>
         </div>
-    </div>
+      </div>
     )
 }
 

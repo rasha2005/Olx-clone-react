@@ -9,6 +9,7 @@ import Login from './pages/Login';
 import { AuthContext } from './store/userAuthContext';
 import { onAuthStateChanged } from 'firebase/auth';
 import Create from './pages/Create.jsx';
+import Details from './pages/Details.jsx';
 
 function App() {
   const {user,setUser} = useContext(AuthContext);
@@ -30,7 +31,8 @@ function App() {
     <Router>
         <Routes>
           <Route path='/' element={<Home />} />
-          <Route path='/create' element={<Create />} />
+          { user && <Route path='/create' element={<Create />} />}
+          <Route path='/details' element={<Details />} />
           {!user && <Route path="/signup" element={<SignUp />} />}
           {!user && <Route path="/login" element={<Login />} />}
           <Route path="*" element={<Navigate to="/" replace />} />

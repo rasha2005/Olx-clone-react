@@ -4,7 +4,7 @@ import { AuthContext } from "../store/userAuthContext";
 import { Link, useNavigate } from "react-router-dom";
 import { logout } from "../firebase/config";
 
-const Header = () => {
+const Header = (props) => {
   const navigate = useNavigate();
 
   const {user ,setUser} = useContext(AuthContext)
@@ -34,6 +34,7 @@ const Header = () => {
 
       <div className="col-span-7 ml-10 flex">
         <input
+          onChange={(e) => props?.setSearch(e.taarget.value)}
           type="text"
           className="border-2 border-black ms-3 px-1 my-2 py-2 w-full"
           placeholder="Find Cars,Mobile Phones and More..."
@@ -72,10 +73,20 @@ const Header = () => {
                         Login
                     </Link>
                 )}
-          
-              <button className="nav-text px-6 py-1 bg-white rounded-3xl sell-button flex items-center">
-                SELL
-              </button>
+          {user ? (
+                   <Link to="/create"> <button className="nav-text px-6 py-1 bg-white rounded-3xl sell-button flex items-center">
+                   SELL
+                 </button>
+                 </Link>
+          ):
+          (
+            <Link to="/login"> <button className="nav-text px-6 py-1 bg-white rounded-3xl sell-button flex items-center">
+                   SELL
+                 </button>
+                 </Link>
+          )
+            
+}
         </div>
       </div>
     </div>

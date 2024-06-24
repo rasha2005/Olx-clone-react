@@ -7,6 +7,7 @@ import Footer from "./Footer"
 const Main = () => {
 
     const [prod , setProd] = useState([]);
+    const [search , setSearch] = useState('');
 
    const getProduct = () => {
     fetch('https://fakestoreapi.com/products')
@@ -19,9 +20,9 @@ const Main = () => {
    },[])
     return (
         <div>
-            <Header />
+            <Header setSearch={setSearch}/>
             <Menubar />
-            <Card />
+            <Card search={search} />
             <Footer />
         </div>
     )
