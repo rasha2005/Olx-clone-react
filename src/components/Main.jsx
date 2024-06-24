@@ -21,7 +21,7 @@ const Main = () => {
         <div>
             <Header />
             <Menubar />
-            <Card products={prod}/>
+            <Card />
             <Footer />
         </div>
     )
